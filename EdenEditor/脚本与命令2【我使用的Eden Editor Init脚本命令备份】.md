@@ -4,7 +4,7 @@
  * @Author: Ultronxr
  * @Date: 2021-01-11 21:25:36
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-12 18:04:35
+ * @LastEditTime: 2021-01-15 16:36:49
 -->
 
 # 我使用的Eden Editor Init脚本命令备份
@@ -21,8 +21,10 @@
 
 ## 全局Init脚本命令备份
 
+复制脚本时请勿将第一行注释一起复制，否则会报错。
+
 ```script
-//global init script
+// global init script
 
 enableEnvironment [false, false];
 setTerrainGrid 50;
@@ -35,10 +37,21 @@ setTerrainGrid 50;
 
 ## 局部Init脚本命令备份
 
-```script
-//FA181 script
+复制脚本时请勿将第一行注释一起复制，否则会报错。
 
-vehicle player addMagazines ["magazine_Fighter01_Gun20mm_AA_x450", 30];
+```script
+// FA181 script
+
+vehicle player addMagazines ["240Rnd_CMFlareMagazine", 10];
+vehicle player addMagazines ["magazine_Fighter01_Gun20mm_AA_x450", 20];
+
+vehicle player addMagazines ["7Rnd_Rocket_04_HE_F", 20];
+vehicle player addWeapon "Rocket_04_HE_Plane_CAS_01_F";
+
+vehicle player addMagazines ["7Rnd_Rocket_04_AP_F", 20];
+vehicle player addWeapon "Rocket_04_AP_Plane_CAS_01_F";
+
+
 
 
 
