@@ -9,6 +9,8 @@
 
 # 我使用的Eden Editor Init脚本命令备份
 
+[TOC]
+
 ## Init脚本命令在哪里
 
 一、全局Init脚本：

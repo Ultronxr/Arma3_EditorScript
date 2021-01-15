@@ -5,10 +5,12 @@
  * @Author: Ultronxr
  * @Date: 2021-01-11 21:25:36
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-15 16:36:23
+ * @LastEditTime: 2021-01-15 16:42:14
 -->
 
 # Eden Editor编辑器常用脚本命令摘录与介绍
+
+[TOC]
 
 帮助内容请参见【参考文档和官方Wiki】文件中的`脚本与命令`->`脚本命令目录`条目下的内容。
 

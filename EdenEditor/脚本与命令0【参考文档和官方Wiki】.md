@@ -4,10 +4,12 @@
  * @Author: Ultronxr
  * @Date: 2021-01-11 16:43:34
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-15 16:35:46
+ * @LastEditTime: 2021-01-15 16:41:35
 -->
 
 # 参考文档和官方Wiki
+
+[TOC]
 
 ## 一、所有对象、资产、物品定义目录
 
@@ -46,11 +48,9 @@
 ### 脚本语言介绍
 
 + [Arma3脚本语言](https://community.bistudio.com/wiki/Introduction_to_Arma_Scripting)
-
 + [SQF脚本基础语法](https://community.bistudio.com/wiki/SQF_syntax)
 
 ### 脚本命令目录
 
 + [脚本命令分类](https://community.bistudio.com/wiki/Category:Scripting_Commands_by_Functionality)
-
 + [列出所有脚本命令](https://community.bistudio.com/wiki/Category:Arma_3:_Scripting_Commands)
