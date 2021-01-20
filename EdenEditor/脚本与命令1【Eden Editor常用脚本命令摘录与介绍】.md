@@ -1,11 +1,10 @@
 <!--
-
- * @Description: 
+ * @Description: Eden Editor编辑器常用脚本命令摘录与介绍
  * @Version: 
  * @Author: Ultronxr
- * @Date: 2021-01-11 21:25:36
+ * @Date: 2021-01-11 21:
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-15 16:42:14
+ * @LastEditTime: 2021-01-20 20:48:53
 -->
 
 # Eden Editor编辑器常用脚本命令摘录与介绍
@@ -14,7 +13,9 @@
 
 帮助内容请参见【参考文档和官方Wiki】文件中的`脚本与命令`->`脚本命令目录`条目下的内容。
 
-为了便于查找、对应官方文档位置，这里的命令分类与排序全部采用官方文档中的方式。部分命令被归于多个分类，这里只在某个分类中记录一次，不重复记录。
+为了便于查找、对应官方文档位置，这里的命令分类与排序全部采用官方文档中的方式。官方文档把脚本命令按照功能性分类时，有两个分类目录，一个是主分类，另一个是子分类（Subcategories），这里把两种分类合并在一起记录。
+
+部分命令同时被归于多个分类，这里只在某个分类中记录一次，不重复记录。
 
 注：
 
@@ -22,6 +23,7 @@
 + 命令中的单词如果在下方有解释说明，则该单词是这条命令的参数，使用命令时需要把这些参数替换为实际内容；
 + 参数中如果注明了“备选值”，请尽量在备选值中选择填写，否则可能会导致命令执行出错；
 + 在描述与讲解命令时使用了很多英文单词，这里并不是不给翻译，而是这些单词是官方在代码/编辑器中定义的专有敏感词，使用原单词可以防止出现谬误；
++ 部分命令会有多种重载形式，例如传入参数可多可少等情况，部分命令有需要的话我会将多种重载形式都列出，但是大部分都只写了最常用的形式；
 
 ## 一、*Animations* 动画效果命令
 
@@ -41,6 +43,8 @@
 
 ## 九、*Conversations* 对话、主题命令
 
+## [Subcategory子分类]、 *Curator* 游戏策划者界面命令（宙斯模式的game master）
+
 ## 十、*Custom Panels* 显示面板命令（特指左右两个显示面板）
 
 ## 十一、*Custom Radio and Chat* 无线电、通讯命令
@@ -57,7 +61,7 @@
 
 ## 十七、*Environment* 环境命令（日期、时间、天气等）
 
-### 1.控制环境动物与环境声音
+### 1. *enableEnvironment* 控制环境动物与环境声音
 
 [原链接](https://community.bistudio.com/wiki/enableEnvironment)
 
@@ -77,7 +81,7 @@ return: 无
 enableEnvironment [false, false];
 ```
 
-### 2.修改地形网格分辨率
+### 2. *setTerrainGrid* 修改地形网格分辨率
 
 [原链接](https://community.bistudio.com/wiki/setTerrainGrid)
 
@@ -86,7 +90,7 @@ enableEnvironment [false, false];
 ```script
 setTerrainGrid grid;
 
-grid: Number，一个0到50之间的数字。数字越小地形越精细，游戏越卡顿，反之地形越粗糙，游戏越流畅。
+grid: Number，处于(0,50]区间的数字。数字越小地形越精细，游戏越卡顿，反之地形越粗糙，游戏越流畅。
         备选值：3.125（地形最细致，最卡顿）、6.25、12.5（单人模式默认值）、25（多人模式默认值）、50（地形最平滑，最流畅）
         注：如果所填数字不在上述备选值之中，则会自动填入一个离所填数字最接近的备选值。
 
@@ -150,6 +154,8 @@ setTerrainGrid 50;
 
 ## 四十二、*Math - Vectors* 数学相关命令（向量）
 
+## [Subcategory子分类]、*Mines* 地雷命令
+
 ## 四十三、*Mission Information* 任务参数命令
 
 ## 四十四、*Mods and Addons* 扩展、插件命令
@@ -160,16 +166,16 @@ setTerrainGrid 50;
 
 ## 四十七、*Object Manipulation* 对象操作命令
 
-### 1.创建/生成载具
+### 1. *createVehicle* 生成载具/建筑/物体对象
 
 [原链接](https://community.bistudio.com/wiki/createVehicle)
 
 ````script
 createVehicle ["type", position, ["markers"], placement, "special"]
 
-type: String，字符串。表示载具对象名称。
+type: String，字符串。表示载具或物体对象名称。
 position: PositionATL/PositionAGL/Position2D/Object，生成位置。可以使用特殊函数获取位置。
-markers: Array，字符串数组。其中可以填写多个标记点（markers）名称。
+markers: Array，字符串数组。其中可以填写多个标记点名称（markers，且这里的名称指的不是标记点的描述，而是标记点的变量名）。
         注：如果填写了markers参数，载具会在给定位置与这些标记点之间随机选择一个位置生成。
 placement: Number，数字。表示载具会生成在指定位置以placement为半径的圆内任意位置。
 special: Sting，字符串。特殊状态。
@@ -180,10 +186,42 @@ return: Object，生成的载具对象。如果生成出错或失败，返回obj
 ````
 
 ```script
-例1：//TODO
+例1：在玩家所在的位置（周围最近的空地处）生成一辆Hunter运输车
+hunter1 = "B_MRAP_01_F" createVehicle position player;
+
+例2：在名为hunter_marker的标记点（周围最近的空地处）生成一辆Hunter运输车
+hunter2 = "B_MRAP_01_F" createVehicle getMarkerPos "hunter_marker";
+
+例3：以玩家所在的位置为圆心，半径5米的圆环中任意位置（空地处）生成一辆Hunter运输车
+hunter3 = createVehicle ["B_MRAP_01_F", position player, [], 5, "NONE"];
+
+例4：在玩家所在的位置（不检测物品模型碰撞）生成一辆Hunter运输车
+hunter4 = createVehicle ["B_MRAP_01_F", position player, [], 0, "CAN_COLLIDE"];
+
+例5：在名为heli_marker的标记点位置生成一辆MH-9 Hummingbird直升机，且悬停在默认高度200米处（但是由于没有驾驶人员，它最终会下降高度直至坠毁）
+heli1 = createVehicle ["B_Heli_Light_01_F", getMarkerPos "heli_marker", [], 0, "FLY"];
+
+例6：使用spawn命令在生成载具对象时初始化该载具的属性。这里使用了例5的命令，直升机在生成后经过3秒，直升机自毁
+heli1 = createVehicle ["B_Heli_Light_01_F", getMarkerPos "heli_marker", [], 0, "FLY"];
+heli1 spawn
+{
+    sleep 3;
+    _this setDamage 1;
+};
+
+例7：在spawn命令中直接嵌套生成载具对象并同时初始化载具的属性。这里使用了例6命令的另一种写法，效果与例6相同
+[] spawn
+{
+    heli1 = createVehicle ["B_Heli_Light_01_F", getMarkerPos "heli_marker", [], 0, "FLY"];
+    sleep 3;
+    heli1 setDamage 1;
+};
+
+例8：在玩家所在位置生成一座Shop(Stone)建筑物
+building1 = "Land_i_Shop_02_V3_F" createVehicle position player;
 ```
 
-### 2.损坏的载具是否能容纳乘客
+### 2. *allowCrewInImmobile* 损坏的载具是否能容纳乘客
 
 [原链接](https://community.bistudio.com/wiki/allowCrewInImmobile)
 
@@ -211,6 +249,61 @@ _vehicle allowCrewInImmobile true;
 } forEach vehicles;
 ```
 
+### 3. *setDamage* 设置载具/建筑/物品对象的损坏程度
+
+[原链接](https://community.bistudio.com/wiki/setDamage)
+
+```script
+object setDamage damage;
+
+object: Object，物品对象（可以是人、载具、建筑、物体）。
+damage: Number，处于[0,1]区间的数字，可以为小数或整数。表示物品对象的损坏程度，数字越大损坏程度越大。当载具的损坏程度到达1时，载具会成为一具残骸。
+        注：当载具损坏程度曾经到达过1，即已经成为残骸了，再使用这个命令把损坏程度降低，载具将仍旧是一具残骸，而不会被修复成可驾驶的载具；
+            如果载具损坏程度到达1（残骸）时，玩家人物仍处于残骸中且未死亡（无敌状态或其他情况），有几率可能会导致玩家人物无法正常从载具中离开；
+            如果载具损坏时曾导致油箱漏油，使用这条命令修复载具不会让油箱中的燃油重新加满，若要如此，请参看setFuel命令；
+            使用这条命令设置载具损坏程度，载具不同部件的损坏是有先后顺序的，不同载具会有不同情况，请按照实际情况设置。
+
+return: 无。
+
+
+object setDamage [damage, useEffects];
+
+object: Object，物品对象（可以是人、载具、建筑、物体）。
+damage: Number，处于[0,1]区间的数字，可以为小数或整数（可以理解成从0%到100%）。表示物品对象的损坏程度，数字越大损坏程度越大。当载具的损坏程度到达1时，载具会成为一具残骸。
+useEffects: Boolean，布尔值。决定物品对象在受到损坏后是否播放损坏过程的动画效果（主要是建筑、物体等对象较为明显，例如房屋倒塌效果）。默认值为true，即默认播放损坏过程的动画效果。
+        备选值：true/false
+
+return: 无。
+```
+
+```script
+例1：设置玩家当前驾驶的载具损耗程度为0，修复至全新（完好无损）
+vehicle player setDamage 0;
+
+例2：生成一辆Hunter运输车，并设置这辆车的损耗程度为1（彻底报废，成为爆炸燃烧的残骸）
+hunter1 = "B_MRAP_01_F" createVehicle position player;
+hunter1 setDamage 1;
+
+例3：在玩家位置生成一座Shop(Stone)建筑物，并彻底摧毁它，同时显示倒塌过程动画直至留下废墟
+building1 = "Land_i_Shop_02_V3_F" createVehicle position player;
+building1 setDamage [1, true];
+
+例4：在玩家位置生成一座Shop(Stone)建筑物，并彻底摧毁它，只显示倒塌最后留下的废墟
+building1 = "Land_i_Shop_02_V3_F" createVehicle position player;
+building1 setDamage [1, false];
+```
+
+### 5. *setFuel* 设置载具对象的剩余燃油
+
+[原链接](https://community.bistudio.com/wiki/setFuel)
+
+```script
+
+```
+
+```script
+
+```
 
 
 ## 四十八、*Particles* 粒子效果命令
@@ -222,6 +315,20 @@ _vehicle allowCrewInImmobile true;
 ## 五十一、*Positions* 位置坐标、高度命令
 
 ## 五十二、*Program Flow* 代码流程命令（循环、条件判断、跳转等）
+
+### 1. *spawn* 控制/修改生成对象的属性
+
+[原链接](https://community.bistudio.com/wiki/spawn)
+
+```script
+
+```
+
+```script
+
+```
+
+
 
 ## 五十三、*Radio and Chat* 无线电、聊天信息命令
 
@@ -237,7 +344,7 @@ _vehicle allowCrewInImmobile true;
 
 ## 五十九、*Sensors* 传感器命令
 
-### 1.设置车辆雷达开关
+### 1. *setVehicleRadar* 设置车辆雷达开关
 
 [原链接](https://community.bistudio.com/wiki/setVehicleRadar)
 
@@ -288,38 +395,7 @@ _vehicle setVehicleRadar 1;
 
 ## 七十四、*Unit Inventory* 部队单位库存、仓储命令
 
-### 1.移除部队单位装备的武器（global）
-
-[原链接](https://community.bistudio.com/wiki/removeWeaponGlobal)
-
-```script
-unit removeWeaponGlobal "weapon";
-
-unit: Object，单位对象。人、载具等。
-weapon: String，字符串。武器。
-```
-
-```script
-例1：删除所有单位对象的镭射发射器
-{
-    _x removeWeaponGlobal "Laserdesignator";
-} forEach allUnits;
-
-例2：删除所有载具的SR和MR两种AA导弹
-{
-    _x removeWeaponGlobal "weapon_AMRAAMLauncher";
-    _x removeWeaponGlobal "weapon_BIM9xLauncher";
-} forEach vehicles;
-
-例3：删除所有xxxxxxxxxxxx载具装备的xxxxxxxxxxxx //TODO
-{
-    if (typeOf _x == "O_Heli_Attack_02_black_F") then {
-        _x removeWeaponGlobal "rockets_Skyfire";
-    };
-} forEach vehicles;
-```
-
-### 2.添加弹匣
+### 1. *addMagazines* 添加弹匣
 
 [原链接](https://community.bistudio.com/wiki/addMagazines)
 
@@ -341,7 +417,7 @@ player addMagazines ["30Rnd_65x39_caseless_mag", 3];
 vehicle player addMagazines ["magazine_Fighter01_Gun20mm_AA_x450", 3];
 ```
 
-### 3.添加武器
+### 2. *addWeapon* 添加武器
 
 [原链接](https://community.bistudio.com/wiki/addWeapon)
 
@@ -366,13 +442,13 @@ vehicle player addMagazines ["magazine_Fighter01_Gun20mm_AA_x450", 10];
 vehicle player addWeapon "weapon_Fighter_Gun20mm_AA";
 ```
 
-### 4.移除武器
+### 3. *removeWeapon* 移除武器
 
 [原链接](https://community.bistudio.com/wiki/removeWeapon)
 
-移除对象的武器会/不会把该武器对应的所有弹匣一并移除。//TODO
+移除对象的武器**不会把该武器对应的所有弹匣一并移除**，移除弹匣需要另外操作，否则下次添加相同的武器时原来的弹匣还是存在的。
 
-如果尝试移除对象没有的武器，代码会/不会报错，会/不会忽略这次操作。//TODO
+如果尝试移除对象没有的武器，代码不会报错，而是忽略这次移除操作。
 
 ```script
 unit removeWeapon "weapon";
@@ -391,11 +467,110 @@ player removeWeapon "srifle_GM6_F";
 vehicle player removeWeapon "weapon_Fighter_Gun20mm_AA";
 ```
 
+### 4. *removeWeaponGlobal* 移除部队单位装备的武器（global）
 
+[原链接](https://community.bistudio.com/wiki/removeWeaponGlobal)
+
+```script
+unit removeWeaponGlobal "weapon";
+
+unit: Object，单位对象。人、载具等。
+weapon: String，字符串。武器。
+```
+
+```script
+例1：删除所有单位对象的镭射发射器
+{
+    _x removeWeaponGlobal "Laserdesignator";
+} forEach allUnits;
+
+例2：删除所有载具的SR和MR两种AA导弹
+{
+    _x removeWeaponGlobal "weapon_AMRAAMLauncher";
+    _x removeWeaponGlobal "weapon_BIM9xLauncher";
+} forEach vehicles;
+
+例3：删除所有IFV-6a Cheetah大防空车的泰坦地对空AA导弹
+{
+    if (typeOf _x == "B_T_APC_Tracked_01_AA_F") then {
+        _x removeWeaponGlobal "missiles_titan_AA";
+    };
+} forEach vehicles;
+```
+
+### 5. *setAmmo* 设置武器弹匣中的剩余弹药数量
+
+[原链接](https://community.bistudio.com/wiki/setAmmo)
+
+设置武器已经装载的弹匣中的弹药数量（而不是弹匣数量），且只会修改当前正在使用的弹匣中的弹药数量，其他备弹弹匣中的弹药数量不会受到影响。
+
+```script
+unit setAmmo [weapon, count];
+
+unit: Object，对象。可以是人或载具。
+weapon: String，字符串。武器的名称，可以使用特殊对象获取武器信息。
+count: Number，大于等于0的整数。表示弹匣中的弹药数量。
+        注：如果所填数量大于弹匣所能装下弹药的数量上限，会被自动设置为满弹匣的数量，而不是无限制。
+
+return: 无。
+```
+
+```script
+例1：设置玩家手枪的弹匣中的弹药数量为10发
+player setAmmo [handgunWeapon player, 10];
+
+例2：设置玩家当前拿着武器的弹匣中的弹药数量为10发
+player setAmmo [currentWeapon player, 1];
+
+例3：设置玩家当前驾驶载具的20mm机炮当前弹匣中的弹药数量为100发
+vehicle player setAmmo ["weapon_Fighter_Gun20mm_AA", 100];
+```
 
 ## 七十五、*Variables* 变量操作命令
 
 ## 七十六、*Vehicle in Vehicle Transport* 载具运输命令
+
+## [Subcategory子分类]、*Vehicle Inventory* 载具仓储命令
+
+### 1. *setVehicleAmmo* 设置载具备弹数量
+
+[原链接](https://community.bistudio.com/wiki/setVehicleAmmo)
+
+设置载具的整体备弹数量（仅与系统载具类型预设的`满备弹量参照`相比，或者与脚本执行后的载具`满备弹量参照`相比）。
+
++ 想要设置一辆载具当前的整体备弹数量，需要一个`满备弹量参照`。在默认情况下，以一辆载具的系统预设值作为满备弹量参照；但是如果事先使用脚本命令修改了一辆载具的武器备弹情况（同一局游戏内，或是脚本自定义的载具对象），那么这辆载具的满备弹量参照就会变成脚本修改之后的值。
+
++ ~~载具上**每一种武器**的备弹量都是单独计算的，且每一种武器的**总共弹匣数量**、**已装载弹匣中的弹药数量**也是单独计算的（先算弹匣数量，如果弹匣数量只有1个，再算已装载弹匣中的弹药数量）~~。//TODO 20210119 暂时还未发现确切的规律，官方文档下面已经有一些玩家使用意见，后续需要完善，下面的举例2同理
++ 仅与满载弹量相比计算，而不会在上一次的修改结果基础上继续计算。
+
+举例：
+
+1. 例如F/A181默认装载了20mm机炮450发（只有一个弹匣），那么这个450发就是F/A181 20mm机炮的默认满备弹量参照。这时使用setVehicleAmmo命令修改备弹量，参照数量就是450，取1就是450、取0.5就是225、取0.1就是45。
+2. ~~如果游戏中使用例如addMagazines等命令给F/A181 20mm机炮弹匣数量修改到10个，那么这架181此时有两个满备弹量参照，其一**总共有10个弹匣**（包括已装载的一个弹匣）、其二**每个弹匣满弹药数量为450发**。          这时如果使用setVehicleAmmo命令修改备弹量，例如取值0.5，首先会计算**总共弹匣数量**（即参照数量为10），取0.5就是总共弹匣数量变成5，又因为弹匣数量大于1，所以不计算已装载弹匣中的弹药数量，最终结果就是一个5个弹匣，其中一个已装载，且已装载的弹匣中是满弹药450发。          如果使用setVehicleAmmo且取值0.1，首先计算**总共弹匣数量**（参照数量10），取0.1为总共1个弹匣，继续计算**已装载弹匣中的弹药数量**，取0.1为弹药数量45发，最终结果就是只有1个弹匣且这个弹匣已装载，其中只有45发弹药。~~
+
+```script
+vehicleName setVehicleAmmo value;
+
+vehicleName: Object，载具对象。
+value: Number，[0,1]区间的数字，可以是整数或小数。数字越小，备弹量越少，数字越大，备弹量越多。
+        备选值：0，空载弹；1，满载弹；其他[0,1]区间小数；
+
+return: 无。
+```
+
+```script
+例1：设置玩家当前驾驶的载具为满备弹量
+vehicle player setVehicleAmmo 1;
+
+例2：设置玩家当前驾驶的载具载弹量为满备弹量参照的一半
+vehicle player setVehicleAmmo 0.5;
+
+例3：设置玩家当前驾驶的载具为空备弹量
+vehicle player setVehicleAmmo 0;
+```
+
+
+
 
 ## 七十七、*Vehicle Loadout* 载具外部装备命令（装甲、外挂等）
 

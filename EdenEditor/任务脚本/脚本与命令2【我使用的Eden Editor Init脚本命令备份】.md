@@ -1,13 +1,13 @@
 <!--
- * @Description: 
+ * @Description: 我使用的Eden Editor脚本命令备份
  * @Version: 
  * @Author: Ultronxr
  * @Date: 2021-01-11 21:25:36
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-15 16:36:49
+ * @LastEditTime: 2021-01-17 12:17:37
 -->
 
-# 我使用的Eden Editor Init脚本命令备份
+# 我使用的Eden Editor脚本命令备份
 
 [TOC]
 
