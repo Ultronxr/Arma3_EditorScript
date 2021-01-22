@@ -4,7 +4,7 @@
  * @Author: Ultronxr
  * @Date: 2021-01-11 21:
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-20 20:48:53
+ * @LastEditTime: 2021-01-22 12:42:14
 -->
 
 # Eden Editor编辑器常用脚本命令摘录与介绍
@@ -24,6 +24,7 @@
 + 参数中如果注明了“备选值”，请尽量在备选值中选择填写，否则可能会导致命令执行出错；
 + 在描述与讲解命令时使用了很多英文单词，这里并不是不给翻译，而是这些单词是官方在代码/编辑器中定义的专有敏感词，使用原单词可以防止出现谬误；
 + 部分命令会有多种重载形式，例如传入参数可多可少等情况，部分命令有需要的话我会将多种重载形式都列出，但是大部分都只写了最常用的形式；
++ 命令下面标注的[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)]、[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)]、[EffectsLocal ![EL](./../assets/img/EffectsLocal.jpg)]、[EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]标签，含义依次是“本地执行”、“全局执行”、“执行效果只影响本地”、“执行效果影响全局”，详细信息请查阅文档中的Local与Global内容；
 
 ## 一、*Animations* 动画效果命令
 
@@ -63,6 +64,8 @@
 
 ### 1. *enableEnvironment* 控制环境动物与环境声音
 
+[EffectsLocal ![EL](./../assets/img/EffectsLocal.jpg)]
+
 [原链接](https://community.bistudio.com/wiki/enableEnvironment)
 
 ```script
@@ -83,6 +86,8 @@ enableEnvironment [false, false];
 
 ### 2. *setTerrainGrid* 修改地形网格分辨率
 
+[EffectsLocal ![EL](./../assets/img/EffectsLocal.jpg)]
+
 [原链接](https://community.bistudio.com/wiki/setTerrainGrid)
 
 修改地形网格分辨率（单位：米），从而影响地形中内容的精细复杂程度，例如远处地形的平滑程度、植被覆盖率、是否存在草皮等。
@@ -101,8 +106,6 @@ return: 无
 例：去掉所有草皮
 setTerrainGrid 50;
 ```
-
-
 
 ## 十八、*Event Handlers* 时间监听器命令
 
@@ -162,11 +165,41 @@ setTerrainGrid 50;
 
 ## 四十五、*Multiplayer* 多人游戏命令
 
+### 1. *local* 检查对象是否处于本地状态
+
+[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)]
+
+[原链接](https://community.bistudio.com/wiki/local)
+
+检查多人游戏中的某个对象是否处于本地状态，从而决定部分local脚本命令应该放在哪台机器上执行。
+
+关于对象的不同状态（本地、全局），请查看这个[链接](https://community.bistudio.com/wiki/Multiplayer_Scripting#Locality)。
+
+一些特殊的状态在此列出：单人游戏中所有对象都是local状态，多人游戏中游戏逻辑、游戏模块对于服务器是local的，多人游戏中地形对象对于所有机器都是local的。
+
+```script
+local object;
+
+object: Object/Group，对象或组。被判定是否为local状态的对象/组。
+
+return: Boolean，布尔值。对象是否是local状态，是为true，否为false。
+```
+
+```script
+例：检查生成的hunter1对象是否是本地对象，如果是，则弹出消息提醒“hunter1 is local.”
+hunter1 = "B_MRAP_01_F" createVehicle position player;
+if (local hunter1) then { 
+ hint format ["hunter1 is local."]; 
+};
+```
+
 ## 四十六、*Object Detection* 对象检测命令
 
 ## 四十七、*Object Manipulation* 对象操作命令
 
 ### 1. *createVehicle* 生成载具/建筑/物体对象
+
+[EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
 
 [原链接](https://community.bistudio.com/wiki/createVehicle)
 
@@ -251,6 +284,8 @@ _vehicle allowCrewInImmobile true;
 
 ### 3. *setDamage* 设置载具/建筑/物品对象的损坏程度
 
+[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+
 [原链接](https://community.bistudio.com/wiki/setDamage)
 
 ```script
@@ -295,14 +330,29 @@ building1 setDamage [1, false];
 
 ### 5. *setFuel* 设置载具对象的剩余燃油
 
+[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+
 [原链接](https://community.bistudio.com/wiki/setFuel)
 
 ```script
+vehicle setFuel amount;
 
+vehicle: Object，载具对象。
+amount: Number，[0,1]区间的数字，可以是小数。数字越小载具燃油量越少，数字越大载具燃油量越多。
+        备选值：0，空燃油；1，满燃油；其他0-1之间的小数。
+
+return: 无。
 ```
 
 ```script
+例1：设置玩家当前驾驶的载具为满燃油
+vehicle player setFuel 1;
 
+例2：设置玩家当前驾驶的载具剩余一半燃油
+vehicle player setFuel 0.5;
+
+例3：设置玩家当前驾驶的载具为空燃油
+vehicle player setFuel 0;
 ```
 
 
@@ -320,15 +370,31 @@ building1 setDamage [1, false];
 
 [原链接](https://community.bistudio.com/wiki/spawn)
 
-```script
+这个命令可以用来操作各种对象，包括基本的游戏内对象（人物、载具等），也包括游戏逻辑中的对象（聊天、对话框等）。
 
+使用spawn命令执行操作，该操作不会被立即执行，而是被加入一个调度器（[scheduler](https://community.bistudio.com/wiki/Scheduler)），由调度器控制这条命令何时被执行（取决于调度器的空闲状况）；如果有多条spawn命令加入调度器，并不总是先加入的命令先执行（有可能会乱序），如果你需要顺序执行，请查看[BIS_fnc_spawnOrdered](https://community.bistudio.com/wiki/BIS_fnc_spawnOrdered)命令。
+
+```script
+arguments spawn code;
+
+arguments: Any value，任意变量值。在这里列出的变量/参数会被用于传入spawn后面的脚本代码中执行，如果不需要变量/参数，这里可以留空（使用[]留空数组）。
+code: Code，脚本代码。需要如何创建对象，或如何修改生成对象的属性，有这里的脚本代码控制。
+
+return: Script Handle，脚本句柄。用于检查这句spawn命令是否被执行完成，使用scriptDone命令可以直接得知是否执行完成，或者使用isNull命令判空从而间接得知。
 ```
 
 ```script
+例1：生成一句全局聊天“Hello world!”
+_handle = [] spawn {player globalChat "Hello world!"};
 
+例2：生成一辆MH-9 Hummingbird直升机，并在三秒后自毁
+heli1 = "B_Heli_Light_01_F" createVehicle position player;
+heli1 spawn
+{
+    sleep 3;
+    _this setDamage 1;
+};
 ```
-
-
 
 ## 五十三、*Radio and Chat* 无线电、聊天信息命令
 
@@ -397,6 +463,8 @@ _vehicle setVehicleRadar 1;
 
 ### 1. *addMagazines* 添加弹匣
 
+[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+
 [原链接](https://community.bistudio.com/wiki/addMagazines)
 
 ```script
@@ -418,6 +486,8 @@ vehicle player addMagazines ["magazine_Fighter01_Gun20mm_AA_x450", 3];
 ```
 
 ### 2. *addWeapon* 添加武器
+
+[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
 
 [原链接](https://community.bistudio.com/wiki/addWeapon)
 
@@ -444,6 +514,8 @@ vehicle player addWeapon "weapon_Fighter_Gun20mm_AA";
 
 ### 3. *removeWeapon* 移除武器
 
+[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+
 [原链接](https://community.bistudio.com/wiki/removeWeapon)
 
 移除对象的武器**不会把该武器对应的所有弹匣一并移除**，移除弹匣需要另外操作，否则下次添加相同的武器时原来的弹匣还是存在的。
@@ -467,7 +539,9 @@ player removeWeapon "srifle_GM6_F";
 vehicle player removeWeapon "weapon_Fighter_Gun20mm_AA";
 ```
 
-### 4. *removeWeaponGlobal* 移除部队单位装备的武器（global）
+### 4. *removeWeaponGlobal* 移除部队单位装备的武器
+
+[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
 
 [原链接](https://community.bistudio.com/wiki/removeWeaponGlobal)
 
@@ -499,6 +573,8 @@ weapon: String，字符串。武器。
 ```
 
 ### 5. *setAmmo* 设置武器弹匣中的剩余弹药数量
+
+[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
 
 [原链接](https://community.bistudio.com/wiki/setAmmo)
 
@@ -533,6 +609,8 @@ vehicle player setAmmo ["weapon_Fighter_Gun20mm_AA", 100];
 ## [Subcategory子分类]、*Vehicle Inventory* 载具仓储命令
 
 ### 1. *setVehicleAmmo* 设置载具备弹数量
+
+[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
 
 [原链接](https://community.bistudio.com/wiki/setVehicleAmmo)
 

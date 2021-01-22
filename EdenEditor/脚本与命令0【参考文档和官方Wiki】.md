@@ -4,7 +4,7 @@
  * @Author: Ultronxr
  * @Date: 2021-01-11 16:43:34
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-15 16:41:35
+ * @LastEditTime: 2021-01-22 12:42:02
 -->
 
 # 参考文档和官方Wiki
@@ -54,3 +54,8 @@
 
 + [脚本命令分类](https://community.bistudio.com/wiki/Category:Scripting_Commands_by_Functionality)
 + [列出所有脚本命令](https://community.bistudio.com/wiki/Category:Arma_3:_Scripting_Commands)
+
+### 游戏逻辑
+
++ [多人游戏中的Local（本地/局部）与Global（全局）](https://community.bistudio.com/wiki/Multiplayer_Scripting#Locality)
+
