@@ -4,7 +4,7 @@
  * @Author: Ultronxr
  * @Date: 2021-01-11 21:
  * @LastEditors: Ultronxr
- * @LastEditTime: 2021-01-22 12:42:14
+ * @LastEditTime: 2021-03-31 16:55:50
 -->
 
 # Eden Editor编辑器常用脚本命令摘录与介绍
@@ -24,7 +24,7 @@
 + 参数中如果注明了“备选值”，请尽量在备选值中选择填写，否则可能会导致命令执行出错；
 + 在描述与讲解命令时使用了很多英文单词，这里并不是不给翻译，而是这些单词是官方在代码/编辑器中定义的专有敏感词，使用原单词可以防止出现谬误；
 + 部分命令会有多种重载形式，例如传入参数可多可少等情况，部分命令有需要的话我会将多种重载形式都列出，但是大部分都只写了最常用的形式；
-+ 命令下面标注的[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)]、[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)]、[EffectsLocal ![EL](./../assets/img/EffectsLocal.jpg)]、[EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]标签，含义依次是“本地执行”、“全局执行”、“执行效果只影响本地”、“执行效果影响全局”，详细信息请查阅文档中的Local与Global内容；
++ 命令下面标注的[LocalArgument ![LA](./../assets/img/LA.png)]、[GlobalArgument ![GA](./../assets/img/GA.png)]、[LocalEffect ![LE](./../assets/img/LE.png)]、[GlobalEffect ![GE](./../assets/img/GE.png)]、[ServerExec ![SE](./../assets/img/SE.png)] 标签，含义依次是“本地执行参数”、“全局执行参数”、“执行效果只影响本地”、“执行效果影响全局”、“只能在服务器端执行”，详细信息请查阅文档中的Local与Global内容；
 
 ## 一、*Animations* 动画效果命令
 
@@ -64,7 +64,7 @@
 
 ### 1. *enableEnvironment* 控制环境动物与环境声音
 
-[EffectsLocal ![EL](./../assets/img/EffectsLocal.jpg)]
+[LocalEffect ![LE](./../assets/img/LE.png)]
 
 [原链接](https://community.bistudio.com/wiki/enableEnvironment)
 
@@ -86,7 +86,7 @@ enableEnvironment [false, false];
 
 ### 2. *setTerrainGrid* 修改地形网格分辨率
 
-[EffectsLocal ![EL](./../assets/img/EffectsLocal.jpg)]
+[LocalEffect ![LE](./../assets/img/LE.png)]
 
 [原链接](https://community.bistudio.com/wiki/setTerrainGrid)
 
@@ -167,7 +167,7 @@ setTerrainGrid 50;
 
 ### 1. *local* 检查对象是否处于本地状态
 
-[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)]
+[GlobalArgument ![GA](./../assets/img/GA.png)]
 
 [原链接](https://community.bistudio.com/wiki/local)
 
@@ -199,7 +199,7 @@ if (local hunter1) then {
 
 ### 1. *createVehicle* 生成载具/建筑/物体对象
 
-[EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/createVehicle)
 
@@ -284,7 +284,7 @@ _vehicle allowCrewInImmobile true;
 
 ### 3. *setDamage* 设置载具/建筑/物品对象的损坏程度
 
-[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[GlobalArgument ![GA](./../assets/img/GA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/setDamage)
 
@@ -328,9 +328,9 @@ building1 = "Land_i_Shop_02_V3_F" createVehicle position player;
 building1 setDamage [1, false];
 ```
 
-### 5. *setFuel* 设置载具对象的剩余燃油
+### 4. *setFuel* 设置载具对象的剩余燃油
 
-[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[LocalArgument ![LA](./../assets/img/LA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/setFuel)
 
@@ -353,6 +353,27 @@ vehicle player setFuel 0.5;
 
 例3：设置玩家当前驾驶的载具为空燃油
 vehicle player setFuel 0;
+```
+
+### 5. *setVehicleLock* 设置载具对象是否上锁
+
+[LocalArgument ![LA](./../assets/img/LA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
+
+[原链接](https://community.bistudio.com/wiki/setVehicleLock)
+
+```script
+vehicleName setVehicleLock lockState;
+
+vehicleName: Object，载具对象。
+lockState: String，字符串。
+        备选值："UNLOCKED"，未上锁；"DEFAULT"，默认；"LOCKED"，上锁；"LOCKEDPLAYER"，对玩家上锁。
+
+return: 无。
+```
+
+```script
+例1：给玩家当前驾驶的载具上锁
+vehicle player setVehicleLock "LOCKED";
 ```
 
 
@@ -463,7 +484,7 @@ _vehicle setVehicleRadar 1;
 
 ### 1. *addMagazines* 添加弹匣
 
-[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[GlobalArgument ![GA](./../assets/img/GA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/addMagazines)
 
@@ -487,7 +508,7 @@ vehicle player addMagazines ["magazine_Fighter01_Gun20mm_AA_x450", 3];
 
 ### 2. *addWeapon* 添加武器
 
-[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[LocalArgument ![LA](./../assets/img/LA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/addWeapon)
 
@@ -514,7 +535,7 @@ vehicle player addWeapon "weapon_Fighter_Gun20mm_AA";
 
 ### 3. *removeWeapon* 移除武器
 
-[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[LocalArgument ![LA](./../assets/img/LA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/removeWeapon)
 
@@ -541,7 +562,7 @@ vehicle player removeWeapon "weapon_Fighter_Gun20mm_AA";
 
 ### 4. *removeWeaponGlobal* 移除部队单位装备的武器
 
-[ArgumentsGlobal ![AG](./../assets/img/ArgumentsGlobal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[GlobalArgument ![GA](./../assets/img/GA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/removeWeaponGlobal)
 
@@ -574,7 +595,7 @@ weapon: String，字符串。武器。
 
 ### 5. *setAmmo* 设置武器弹匣中的剩余弹药数量
 
-[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[LocalArgument ![LA](./../assets/img/LA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/setAmmo)
 
@@ -610,7 +631,7 @@ vehicle player setAmmo ["weapon_Fighter_Gun20mm_AA", 100];
 
 ### 1. *setVehicleAmmo* 设置载具备弹数量
 
-[ArgumentsLocal ![AL](./../assets/img/ArgumentsLocal.jpg)] [EffectsGlobal ![EG](./../assets/img/EffectsGlobal.jpg)]
+[LocalArgument ![LA](./../assets/img/LA.png)] [GlobalEffect ![GE](./../assets/img/GE.png)]
 
 [原链接](https://community.bistudio.com/wiki/setVehicleAmmo)
 
